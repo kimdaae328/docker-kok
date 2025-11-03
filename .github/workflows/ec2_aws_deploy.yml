@@ -45,6 +45,8 @@ jobs:
             --build-arg KAKAO_CLIENT_SECRET=${{ secrets.KAKAO_CLIENT_SECRET }} \
             --build-arg NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }} \
             --build-arg NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }} \
+            --build-arg EMAIL_ID=${{ secrets.EMAIL_ID }} \
+            --build-arg EMAIL_PASSWORD="${{ secrets.EMAIL_PASSWORD }}" \
           -t docker-kok .
           docker run -d -p 80:10000 --name docker-kok \
             -e EC2_HOST=${{ secrets.EC2_HOST }} \
@@ -60,6 +62,8 @@ jobs:
             -e NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }} \
             -e NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }} \
             -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            -e EMAIL_ID=${{ secrets.EMAIL_ID }} \
+            -e EMAIL_PASSWORD="${{ secrets.EMAIL_PASSWORD }}" \
             docker-kok
             
     - name: Clean up not used images
