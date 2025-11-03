@@ -14,7 +14,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://${EC2_DATABASE_HOST}:5432/app?serverTimezone=Asia/Seoul
     username: spring
-    password: ${EC2_DATABASE_PASSWORD}
+    password: 1234
   session:
     redis:
       repository-type: indexed
