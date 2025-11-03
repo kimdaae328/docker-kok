@@ -25,19 +25,19 @@ jobs:
 
     - name: Copy project to EC2
       run: |
-        rsync -avz -e "ssh -i ~/.ssd/id_rsa" . ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST}}:/home/ubuntu/back-kok
+        rsync -avz -e "ssh -i ~/.ssd/id_rsa" . ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST}}:/home/ubuntu/docker-kok
 
     - name: Build & Run Docker on EC2
       run: |
         ssh -i ~/.ssd/id_rsa ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST}} << EOF
-          cd /home/ubuntu/back-kok
-          docker stop back-kok || true
-          docker rm back-kok || true
-          docker rmi back-kok || true
+          cd /home/ubuntu/docker-kok
+          docker stop docker-kok || true
+          docker rm docker-kok || true
+          docker rmi docker-kok || true
           docker build --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} \
             --build-arg EC2_HOST=${{ secrets.EC2_HOST }} \
             --build-arg EC2_DATABASE_HOST=${{ secrets.EC2_DATABASE_HOST }} \
-            --build-arg AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
+            --build-arg AWS_ACCESS_KEY_ID=docker-kok${{ secrets.AWS_ACCESS_KEY_ID }} \
             --build-arg AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
             --build-arg AWS_S3_BUCKET=${{ secrets.AWS_S3_BUCKET }} \
             --build-arg AWS_REGION=${{ secrets.AWS_REGION }} \
@@ -45,8 +45,8 @@ jobs:
             --build-arg KAKAO_CLIENT_SECRET=${{ secrets.KAKAO_CLIENT_SECRET }} \
             --build-arg NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }} \
             --build-arg NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }} \
-          -t back-kok .
-          docker run -d -p 80:10000 --name back-kok \
+          -t docker-kok .
+          docker run -d -p 80:10000 --name docker-kok \
             -e EC2_HOST=${{ secrets.EC2_HOST }} \
             -e EC2_DATABASE_HOST=${{ secrets.EC2_DATABASE_HOST }} \
             -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
@@ -60,7 +60,7 @@ jobs:
             -e NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }} \
             -e NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }} \
             -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
-            back-kok
+            docker-kok
             
     - name: Clean up not used images
       if: success()
