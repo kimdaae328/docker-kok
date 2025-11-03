@@ -54,7 +54,7 @@ FROM eclipse-temurin:17-jre
 ENV TZ=Asia/Seoul
 
 # JAR 복사 (위 단계에서 생성된 JAR)
-COPY --from=build app/build/libs/docker-kok-0.0.1-SNAPSHOT.jar docker-kok.jar
+COPY --from=build /docker-kok/build/libs/docker-kok-0.0.1-SNAPSHOT.jar docker-kok.jar
 
 # 포트 오픈 (Spring Boot 기본 포트)
 EXPOSE 10000
